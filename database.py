@@ -3,8 +3,11 @@ import logging
 
 
 class DB_handler:	
-	def __init__(self):
+	def __init__(self,withoutdb=False):
 		db_creads=DB_handler.check_and_init_db_creads('/etc/tasksdb.conf')
+		if(withoutdb):
+			self.create_db_handler(db_creads['DB_HOST'],db_creads['USER'],db_creads['PASSWORD'],"")
+			self.initialize_database()
 		self.create_db_handler(db_creads['DB_HOST'],db_creads['USER'],db_creads['PASSWORD'],db_creads['DATABASE'])
 
 	def create_db_handler(self, db_host, user, password, database='tasks'):
@@ -20,7 +23,6 @@ class DB_handler:
 		data = self.cursor.fetchone()
 		print ("Database version : %s " % data)
 
-	@staticmethod
 	def check_and_init_db_creads(conf_file):
 		try:
 	                file_reader=open(conf_file,'r')
@@ -45,10 +47,7 @@ class DB_handler:
 	                        pass
 		return db_creads
 
-	@staticmethod
-	def initialize_database(database="TASKS"):
-		db_creads=DB_handler.check_and_init_db_creads('/etc/tasksdb.conf')
-		self.create_db_handler(db_creads['DB_HOST'],db_creads['USER'],db_creads['PASSWORD'],"")
+	def initialize_database(self, database="tasks"):
 		self.cursor.execute("DROP DATABASE IF EXISTS "+database+";")
 		data = self.cursor.fetchone()
 		print("Data base dropped")
