@@ -54,4 +54,5 @@ class DB_handler:
 		self.cursor.execute("CREATE DATABASE  "+database+";")
 		data = self.cursor.fetchone()
 		print("Database created")
-		
+		self.cursor.execute("USE " + database +";")
+		self.cursor.execute("CREATE TABLE tasks (id  int NOT NULL AUTO_INCREMENT KEY, title VARCHAR(20), status VARCHAR(10), description VARCHAR(20),time_created DATETIME, deadline DATETIME );")
